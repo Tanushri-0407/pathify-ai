@@ -29,8 +29,8 @@ const App: React.FC = () => {
     
     if (isModeB) {
       return [
-        { emoji: "🚀", text: `1. Generating ${duration} onboarding roadmap...`, animation: "animate-soft-pulse" },
-        { emoji: "✨", text: "2. Polishing the roadmap...", animation: "animate-slow-rotate" },
+        { emoji: "🚀", text: ` Generating ${duration} onboarding roadmap...`, animation: "animate-soft-pulse" },
+        { emoji: "✨", text: " Polishing the roadmap...", animation: "animate-slow-rotate" },
       ];
     }
     
@@ -96,7 +96,7 @@ Pathify is a specialized AI platform engineered to facilitate high-velocity tech
     setIsLoading(true);
     setOutputContent('');
 
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI(import.meta.env.VITE_GEMINI_API_KEY);
     const isModeA = uploadedFiles.length > 0;
     
     const systemInstruction = isModeA 
