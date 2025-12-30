@@ -96,7 +96,7 @@ Pathify is a specialized AI platform engineered to facilitate high-velocity tech
     setIsLoading(true);
     setOutputContent('');
 
-    const ai = new GoogleGenAI(import.meta.env.VITE_GEMINI_API_KEY);
+    const ai = new GoogleGenAI({ apiKEY:import.meta.env.VITE_GEMINI_API_KEY});
     const isModeA = uploadedFiles.length > 0;
     
     const systemInstruction = isModeA 
