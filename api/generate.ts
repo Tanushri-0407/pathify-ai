@@ -6,7 +6,7 @@ export default async function handler(req: Request) {
     const { model, systemInstruction, userPrompt, temperature } = body;
 
     const genAI = new GoogleGenAI({
-      apiKey: process.env.API_KEY!,
+     apiKey : AIzaSyCDbXFrELSyhqMfNBz-L-1_mObFD2hE5tA!,
     });
 
     const response = await genAI.models.generateContent({
