@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { GoogleGenAI } from "@google/genai";
 import Input from './components/Input';
 import Button from './components/Button';
 import FileUpload from './components/FileUpload';
@@ -57,34 +56,34 @@ const App: React.FC = () => {
 
   const handleTrySample = useCallback(() => {
     const sampleOutput = `🏗️ BLUEPRINT
-● PROJECT BLUEPRINT
-Pathify is a specialized AI platform engineered to facilitate high-velocity technical onboarding by transforming raw source code into structured architectural audits and contribution roadmaps.
+                      ● PROJECT BLUEPRINT
+                      Pathify is a specialized AI platform engineered to facilitate high-velocity technical onboarding by transforming raw source code into structured architectural audits and contribution roadmaps.
 
-● CORE TECHNOLOGIES & COMPONENTS
-       • React 19: Powering the view layer with concurrent rendering and functional state primitives.
-       • Google Generative AI (Gemini 3 Pro): Providing multi-modal reasoning and code-understanding logic.
-       • Tailwind CSS: Managing atomic design and hardware-accelerated UI transitions.
+                      ● CORE TECHNOLOGIES & COMPONENTS
+                            • React 19: Powering the view layer with concurrent rendering and functional state primitives.
+                            • Google Generative AI (Gemini 3 Pro): Providing multi-modal reasoning and code-understanding logic.
+                            • Tailwind CSS: Managing atomic design and hardware-accelerated UI transitions.
 
-● ARCHITECTURAL SUMMARY & COMPONENTS
-       • App.tsx: Orchestrating global application state, GenAI bridge logic, and route segmentation.
-       • MarkdownOutput.tsx: Implementing a regex-based parser for dynamic report generation and collapsible UI state.
+                      ● ARCHITECTURAL SUMMARY & COMPONENTS
+                            • App.tsx: Orchestrating global application state, GenAI bridge logic, and route segmentation.
+                            • MarkdownOutput.tsx: Implementing a regex-based parser for dynamic report generation and collapsible UI state.
 
-⚠️ SECURITY AND MAINTENANCE
-● SECURITY HOTSPOTS
-       • Client-side Secrets: Environment variables like process.env.API_KEY are exposed in the client bundle.
-       • Buffer Handling: The lack of file size limits in FileUpload.tsx may cause memory heap exhaustion.
+                      ⚠️ SECURITY AND MAINTENANCE
+                      ● SECURITY HOTSPOTS
+                            • Client-side Secrets: Environment variables like process.env.API_KEY are exposed in the client bundle.
+                            • Buffer Handling: The lack of file size limits in FileUpload.tsx may cause memory heap exhaustion.
 
-● RISK & MAINTENANCE
-       • Prompt Injection: Direct injection of user strings into AI prompts is a primary risk factor.
-       • Fragile Regex: The parser depends on emoji-prefix consistency which varies by model output.
+                      ● RISK & MAINTENANCE
+                            • Prompt Injection: Direct injection of user strings into AI prompts is a primary risk factor.
+                            • Fragile Regex: The parser depends on emoji-prefix consistency which varies by model output.
 
-🚀 THE ONBOARDING ROADMAP
-● ${duration.toUpperCase()} TIMELINE
-       • Goal: Debug state synchronization between file uploading and the global loading indicator.
-       • Technical Context: Investigate React batching behavior during multiple asynchronous file buffer resolutions.
+                      🚀 THE ONBOARDING ROADMAP
+                      ● ${duration.toUpperCase()} TIMELINE
+                            • Goal: Debug state synchronization between file uploading and the global loading indicator.
+                            • Technical Context: Investigate React batching behavior during multiple asynchronous file buffer resolutions.
 
-● MICRO-CONTRIBUTION TASK
-       • Task: Add a "Clear All" utility to FileUpload.tsx to purge selected files from the transient state.`;
+                      ● MICRO-CONTRIBUTION TASK
+                            • Task: Add a "Clear All" utility to FileUpload.tsx to purge selected files from the transient state.`;
 
     setOutputContent(sampleOutput);
     setTimeout(() => {
@@ -96,7 +95,6 @@ Pathify is a specialized AI platform engineered to facilitate high-velocity tech
     setIsLoading(true);
     setOutputContent('');
 
-    const ai = new GoogleGenAI({ apiKEY:import.meta.env.VITE_GEMINI_API_KEY});
     const isModeA = uploadedFiles.length > 0;
     
     const systemInstruction = isModeA 
@@ -163,19 +161,19 @@ Pathify is a specialized AI platform engineered to facilitate high-velocity tech
     }
 
     try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
-        contents: userPrompt,
-        config: {
-          systemInstruction: systemInstruction,
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "gemini-3-pro-preview",
+          systemInstruction,
+          userPrompt,
           temperature: 0.1,
-        },
+        }),
       });
 
-      setOutputContent(response.text || "Failed to generate report.");
-      setTimeout(() => {
-        document.getElementById('result-area')?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+      const data = await response.json();
+      setOutputContent(data.text || "Failed to generate report.");
     } catch (error) {
       console.error("Pathify Engine Error:", error);
       setOutputContent("Error during generation. Check console.");
