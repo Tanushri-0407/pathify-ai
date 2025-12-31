@@ -165,7 +165,7 @@ const App: React.FC = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "gemini-3-pro-preview",
+          model: "gemini-2.5-flash",
           systemInstruction,
           userPrompt,
           temperature: 0.1,
